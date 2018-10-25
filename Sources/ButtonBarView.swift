@@ -56,10 +56,10 @@ open class ButtonBarView: UICollectionView {
             updateSelectedBarYPosition()
         }
     }
-    open let barWidth: CGFloat = 42.0
+    open var barWidth: CGFloat = 42.0
     open var selectedBarVerticalAlignment: SelectedBarVerticalAlignment = .bottom
     var selectedBarAlignment: SelectedBarAlignment = .center
-    var selectedIndex = 0
+    open var selectedIndex = 0
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -140,13 +140,13 @@ open class ButtonBarView: UICollectionView {
 
     // MARK: - Helpers
 
-    private func updateContentOffset(animated: Bool, pagerScroll: PagerScroll, toFrame: CGRect, toIndex: Int) {
+    open func updateContentOffset(animated: Bool, pagerScroll: PagerScroll, toFrame: CGRect, toIndex: Int) {
         guard pagerScroll != .no || (pagerScroll != .scrollOnlyIfOutOfScreen && (toFrame.origin.x < contentOffset.x || toFrame.origin.x >= (contentOffset.x + frame.size.width - contentInset.left))) else { return }
         let targetContentOffset = contentSize.width > frame.size.width ? contentOffsetForCell(withFrame: toFrame, andIndex: toIndex) : 0
         setContentOffset(CGPoint(x: targetContentOffset, y: 0), animated: animated)
     }
 
-    private func contentOffsetForCell(withFrame cellFrame: CGRect, andIndex index: Int) -> CGFloat {
+    open func contentOffsetForCell(withFrame cellFrame: CGRect, andIndex index: Int) -> CGFloat {
         let sectionInset = (collectionViewLayout as! UICollectionViewFlowLayout).sectionInset // swiftlint:disable:this force_cast
         var alignmentOffset: CGFloat = 0.0
 
