@@ -168,7 +168,7 @@ open class ButtonBarView: UICollectionView {
         return contentOffset
     }
 
-    func updateSelectedBarYPosition() {
+    open func updateSelectedBarYPosition() {
         var selectedBarFrame = selectedBar.frame
 
         switch selectedBarVerticalAlignment {
