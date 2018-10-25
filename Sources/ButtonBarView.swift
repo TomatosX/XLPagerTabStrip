@@ -46,7 +46,7 @@ public enum SelectedBarVerticalAlignment {
 open class ButtonBarView: UICollectionView {
 
     open lazy var selectedBar: UIView = { [unowned self] in
-        let bar  = UIView(frame: CGRect(x: 0, y: self.frame.size.height - CGFloat(self.selectedBarHeight), width: 0, height: CGFloat(self.selectedBarHeight)))
+        let bar  = UIView(frame: CGRect(x: self.frame.size.width / 2.0, y: self.frame.size.height - CGFloat(self.selectedBarHeight), width: 0, height: CGFloat(self.selectedBarHeight)))
         bar.layer.zPosition = 9999
         return bar
     }()
@@ -56,6 +56,7 @@ open class ButtonBarView: UICollectionView {
             updateSelectedBarYPosition()
         }
     }
+    open let barWidth: CGFloat = 42.0
     open var selectedBarVerticalAlignment: SelectedBarVerticalAlignment = .bottom
     var selectedBarAlignment: SelectedBarAlignment = .center
     var selectedIndex = 0
@@ -97,8 +98,11 @@ open class ButtonBarView: UICollectionView {
 
         var targetFrame = fromFrame
         targetFrame.size.height = selectedBar.frame.size.height
-        targetFrame.size.width += (toFrame.size.width - fromFrame.size.width) * progressPercentage
-        targetFrame.origin.x += (toFrame.origin.x - fromFrame.origin.x) * progressPercentage
+        targetFrame.size.width = barWidth
+        let toX = toFrame.origin.x + (toFrame.width - barWidth) / 2.0
+        let fromX = fromFrame.origin.x + (fromFrame.width - barWidth) / 2.0
+        targetFrame.origin.x = fromFrame.origin.x + (fromFrame.width - barWidth) / 2.0
+        targetFrame.origin.x += (toX - fromX) * progressPercentage
 
         selectedBar.frame = CGRect(x: targetFrame.origin.x, y: selectedBar.frame.origin.y, width: targetFrame.size.width, height: selectedBar.frame.size.height)
 
@@ -122,8 +126,8 @@ open class ButtonBarView: UICollectionView {
 
         updateContentOffset(animated: animated, pagerScroll: pagerScroll, toFrame: selectedCellFrame, toIndex: (selectedCellIndexPath as NSIndexPath).row)
 
-        selectedBarFrame.size.width = selectedCellFrame.size.width
-        selectedBarFrame.origin.x = selectedCellFrame.origin.x
+        selectedBarFrame.size.width = barWidth
+        selectedBarFrame.origin.x = selectedCellFrame.origin.x + (selectedCellFrame.size.width - barWidth) / 2.0
 
         if animated {
             UIView.animate(withDuration: 0.3, animations: { [weak self] in
